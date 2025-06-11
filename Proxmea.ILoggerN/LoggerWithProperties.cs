@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Proxmea.ILoggerN.Logger
+namespace Proxmea.ILoggerN
 {
     public class LoggerWithProperties
     {

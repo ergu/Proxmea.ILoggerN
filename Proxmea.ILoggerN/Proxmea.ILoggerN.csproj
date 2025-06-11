@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Authors>Proxmea AB, jrnker</Authors>
+    <Company>Proxmea AB, jrnker</Company>
+    <Description>
+Proxmea.ILoggerN provides a shared, configurable logging setup for .NET 8 applications using NLog, with a focus on minimal code and settings to get up running.
+It enables consistent, centralized logging across your application, supporting both console, file and Elastic outputs by default.
+It also adds missing functionality to be able to log individual properties.
+The package is designed for easy integration with ASP.NET Core projects and leverages dependency injection for logger access.
+
+It's utilizing NLog as the logging provider, mainly because of its high performance.
+    </Description>
+    <RepositoryUrl>https://github.com/jrnker/Proxmea.ILoggerN</RepositoryUrl>
+    <AssemblyVersion>1.0.50.25162</AssemblyVersion>
+    <Version>$(AssemblyVersion)</Version>
+    <Copyright>Proxmea AB - MPL-2.0</Copyright>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Elastic.CommonSchema.NLog" Version="8.18.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.5.0" />
+    <PackageReference Include="NLog.Targets.ElasticSearch" Version="7.7.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Proxmea.ILoggerN.Default.AppSettings.json" Pack="true" PackagePath="contentFiles\any\any;content">
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\\ReadMe.md" Pack="true" PackagePath="">
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+    <None Include="license.md" Pack="true" PackagePath="">
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

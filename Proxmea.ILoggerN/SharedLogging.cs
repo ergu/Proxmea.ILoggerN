@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Web;
 
-namespace Proxmea.ILoggerN.Logger
+namespace Proxmea.ILoggerN
 {
     public static class SharedLogging
     {
@@ -24,7 +24,7 @@ namespace Proxmea.ILoggerN.Logger
 
             #region Merge NLog config
             // Load shared NLog config
-            var sharedNLogPath = Path.Combine(AppContext.BaseDirectory, "Logger\\ILoggerN.Default.AppSettings.json");
+            var sharedNLogPath = Path.Combine(AppContext.BaseDirectory, "Proxmea.ILoggerN.Default.AppSettings.json");
             JObject sharedNLog = new JObject();
             if (File.Exists(sharedNLogPath))
             {
@@ -56,7 +56,7 @@ namespace Proxmea.ILoggerN.Logger
                 });
 
             // Now, create a temp file for the merged config
-            var mergedConfigPath = Path.Combine(Path.GetTempPath(), $"ILoggerN.Merged.{Guid.NewGuid()}.json");
+            var mergedConfigPath = Path.Combine(Path.GetTempPath(), $"Proxmea.ILoggerN.Merged.{Guid.NewGuid()}.json");
             var mergedRoot = new JObject { ["NLog"] = mergedNLog };
             File.WriteAllText(mergedConfigPath, mergedRoot.ToString());
             #endregion

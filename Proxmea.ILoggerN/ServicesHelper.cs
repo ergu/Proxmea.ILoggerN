@@ -1,4 +1,4 @@
-﻿namespace Proxmea.ILoggerN.Logger
+﻿namespace Proxmea.ILoggerN
 {
     public class ServicesHelper
     {

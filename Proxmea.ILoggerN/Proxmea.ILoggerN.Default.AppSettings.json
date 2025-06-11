@@ -27,7 +27,7 @@
 			"elastic": {
 				"type": "ElasticSearch",
 				"uri": "",
-				"index": "displaybroker-${date:format=yyyy.MM.dd}-000001",
+				"index": "${date:format=yyyy.MM.dd}-000001",
 				"username": "",
 				"password": "",
 				"layout": {

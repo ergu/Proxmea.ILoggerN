@@ -2,7 +2,7 @@
 
 ## Overview
 
-Proxmea.ILoggerN provides a shared, configurable logging setup for .NET 8 applications using NLog. 
+Proxmea.ILoggerN provides a shared, configurable logging setup for .NET 8 applications using NLog, with a focus on minimal code and settings to get up running. 
 It enables consistent, centralized logging across your application, supporting both console, file and Elastic outputs by default. 
 It also adds missing functionality to be able to log individual properties. 
 The package is designed for easy integration with ASP.NET Core projects and leverages dependency injection for logger access.
@@ -63,12 +63,20 @@ public class HelloWorldController : Controller { private readonly ILogger<HelloW
 
 
 5. **Configuration:**
-   - Default NLog settings are in `ILoggerN.Default.AppSettings.json`.
+   - Default NLog settings are in `Proxmea.ILoggerN.Default.AppSettings.json`.
 	
 	 This serves as boilerplate config for NLog.
    - Override or extend logging in your own `appsettings.[environment].json`.
 
      This is where you'd put your application specific minimal NLog config.
+
+## Sample output from `HelloWorld`
+```
+2025-06-11 18:41:54.2293 HelloWorld  INFO HelloWorld.Program Starting
+2025-06-11 18:41:54.2526 HelloWorld  INFO HelloWorld.Program Environment: Production
+2025-06-11 18:41:54.2553 HelloWorld  INFO HelloWorld.Program Application started with properties.  Version=1.0.73.25162
+2025-06-11 18:41:58.5665 HelloWorld  INFO HelloWorld.Controllers.HelloWorldController GetHello called.  ConnectionId=0HND90RH1Q3UT, RequestId=0HND90RH1Q3UT:00000001, RequestPath=/HelloWorld, ActionId=d60d08d9-a508-4200-94ee-84a09af2dfd1, ActionName=HelloWorld.Controllers.HelloWorldController.GetHello (HelloWorld)
+```
 
 # 📜License 
 This project is available under a **Mozilla Public License 2.0 (MPL-2.0)**:  

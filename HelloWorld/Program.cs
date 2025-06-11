@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Proxmea.ILoggerN.Logger;
+using Proxmea.ILoggerN;
 
 namespace HelloWorld
 {
@@ -29,7 +29,7 @@ namespace HelloWorld
             // The built in/default NLog configuration is used to log messages to the console
             // and your project appsettings.[environment].json file is used to log messages to a file, and gives your the ability to override the NLog configuration.
 
-            // Basically, you specify the basics, the default, in the Proxmea.ILoggerN.Default.AppSettings.json file, which is included in this project
+            // Basically, you specify the basics, the default, in the ILoggerN.Default.AppSettings.json file, which is included in this project
             // and then you can override it in your own appsettings.[environment].json file.
 
             #region This is how you'd log in a static function, which this is. 

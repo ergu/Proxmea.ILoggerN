@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Proxmea.ILoggerN.Logger
+namespace Proxmea.ILoggerN
 {
     public class LoggerHelper
     {
