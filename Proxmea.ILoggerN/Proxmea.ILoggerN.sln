@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxmea.ILoggerN", "Proxmea.ILoggerN\Proxmea.ILoggerN.csproj", "{9F82122D-EBFF-4B9A-B7FB-3055B9C0043B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{5603B728-DA9E-4A6D-91C8-1B570106A442}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F82122D-EBFF-4B9A-B7FB-3055B9C0043B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F82122D-EBFF-4B9A-B7FB-3055B9C0043B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F82122D-EBFF-4B9A-B7FB-3055B9C0043B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F82122D-EBFF-4B9A-B7FB-3055B9C0043B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5603B728-DA9E-4A6D-91C8-1B570106A442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5603B728-DA9E-4A6D-91C8-1B570106A442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5603B728-DA9E-4A6D-91C8-1B570106A442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5603B728-DA9E-4A6D-91C8-1B570106A442}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB7F51A0-9339-4539-A82F-FE3AA5E471AD}
+	EndGlobalSection
+EndGlobal
