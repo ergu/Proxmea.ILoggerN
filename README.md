@@ -2,7 +2,7 @@
 
 ## Overview
 
-Proxmea.ILoggerN provides a shared, configurable logging setup for .NET 8 applications using NLog, with a focus on minimal code and settings to get up running. 
+Proxmea.ILoggerN provides a shared, configurable logging setup for .NET 8 applications using NLog, with a focus on minimal code and settings inside your project to get up running. 
 It enables consistent, centralized logging across your application, supporting both console, file and Elastic outputs by default. 
 It also adds missing functionality to be able to log individual properties. 
 The package is designed for easy integration with ASP.NET Core projects and leverages dependency injection for logger access.
@@ -11,12 +11,13 @@ It's utilizing NLog as the logging provider, mainly because of its high performa
 
 ## What It Does
 
-- Sets up NLog as the logging provider for your .NET application.
-- ILogger doesn't play well with `WithProperty`, so we've implemented that here. Easy peasy to use.
+- Sets up NLog as the logging provider for your .NET application. It comes with default well ironed-out layouts. 
+- ILogger is missing `.WithProperty`, so we've implemented that here. Easy peasy to use.
 - Merges default logging configuration with your environment-specific `appsettings.[environment].json`. This effectivly makes your NLog section very small.
 - Allows you to retrieve and use loggers anywhere in your app, including static contexts.
 - Supports logging to both console, file and Elastic by default, with configuration overrides per environment.
 - Provides helpers for adding custom properties to log entries (e.g., application version).
+- All NLog settings are overridable in your own appsettings.json
 
 ## Usage
 
@@ -25,7 +26,7 @@ It's utilizing NLog as the logging provider, mainly because of its high performa
 ```
 var builder = WebApplication.CreateBuilder(args); 
 SharedLogging.ConfigureNLog(builder); 
-1. var app = builder.Build();
+var app = builder.Build();
 ```
 
 
@@ -48,8 +49,12 @@ logger
 4. **Controller Logging (Dependency Injection):**
    In your controller, inject `ILogger<T>` and use as needed:
 ```
-public class HelloWorldController : Controller { private readonly ILogger<HelloWorldController> _logger; 
-	public HelloWorldController(ILogger<HelloWorldController> logger) { 
+public class HelloWorldController : Controller 
+{ 
+	private readonly ILogger<HelloWorldController> _logger; 
+
+	public HelloWorldController(ILogger<HelloWorldController> logger) 
+	{ 
 		_logger = logger; 
 	}
 	
