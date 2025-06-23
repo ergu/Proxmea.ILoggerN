@@ -71,6 +71,9 @@ namespace Proxmea.ILoggerN
 
             builder.Logging.ClearProviders();
             builder.Host.UseNLog();
+
+            // Shutdown nicely upon exit
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => LogManager.Shutdown();
         }
         private static JToken ConfigSectionToJToken(IConfigurationSection section)
         {

@@ -48,8 +48,11 @@ namespace HelloWorld
             _logger?
                 // You can inject any properties you want here, like the version of the app, or anything else you need.
                 .WithProperty("Version", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version ?? new Version { })
-                .LogInformation("Application started with properties.");
+                .LogInformation("This is a simple log message with properties.");
             // And this ends up in the log file, as well as the console, if you have configured it to do so.
+            _logger?.LogWarning("This is a simple log message with a warning.");
+            _logger?.LogError("This is a simple log message with a error.");
+            _logger?.LogCritical("This is a simple log message with a critical error.");
             #endregion
 
             #region The logging in a controller later on is easy peasy

@@ -83,6 +83,12 @@ public class HelloWorldController : Controller
 2025-06-11 18:41:58.5665 HelloWorld  INFO HelloWorld.Controllers.HelloWorldController GetHello called.  ConnectionId=0HND90RH1Q3UT, RequestId=0HND90RH1Q3UT:00000001, RequestPath=/HelloWorld, ActionId=d60d08d9-a508-4200-94ee-84a09af2dfd1, ActionName=HelloWorld.Controllers.HelloWorldController.GetHello (HelloWorld)
 ```
 
+# Changelog
+| Version | Description |
+|---------|-------------|
+| v1.0.62.25174 (2025-06-23) | Changed Elastic layout to be async to prevent blocking the main thread on Elastic failure. Updated default console layout to colour output. |
+| v1.0.49.251620 (2025-06-11) | Initial Release |
+
 # 📜License 
 This project is available under a **Mozilla Public License 2.0 (MPL-2.0)**:  
  

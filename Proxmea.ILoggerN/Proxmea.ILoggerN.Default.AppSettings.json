@@ -1,62 +1,73 @@
 ﻿{
-	"NLog": {
-		"extensions": [
-			{ "assembly": "NLog.Targets.ElasticSearch" },
-			{ "assembly": "Elastic.CommonSchema.NLog" }
-		],
-		"autoReload": true, // NLog default: true
-		"throwConfigExceptions": false, // NLog default: false 
-		"throwExceptions": false,
-		"targets": {
-			"console": {
-				"type": "Console",
-				"layout": "${longdate} ${processname} ${level:uppercase=true:padding=5} ${logger} ${message} ${exception:format=type,message,StackTrace:separator=\r\n} ${all-event-properties:includeScopeProperties=true}"
-			},
-			"file": {
-				"type": "File",
-				"fileName": "${basedir}/logs/app.log",
-				"archiveFileName": "${basedir}/logs/archive/app.{#}.log.zip",
-				"archiveEvery": "Day", // default: Day
-				"archiveNumbering": "DateAndSequence", // default: Sequence
-				"maxArchiveFiles": 7, // default: 0 (unlimited)
-				"enableArchiveFileCompression": true, // default: false
-				"concurrentWrites": true, // default: true
-				"keepFileOpen": true, // default: false
-				"layout": "${longdate} ${processname} ${threadid:uppercase=true:padding=3} ${level:padding=5} ${callsite} ${message} ${exception:format=type,message,StackTrace:separator=\r\n} ${all-event-properties:includeScopeProperties=true}"
-			},
-			"elastic": {
-				"type": "ElasticSearch",
-				"uri": "",
-				"index": "${date:format=yyyy.MM.dd}-000001",
-				"username": "",
-				"password": "",
-				"layout": {
-					"type": "EcsLayout",
-					"includeScopeProperties": true,
-					"labels": [
-						{
-							"name": "Callsite",
-							"layout": "${callsite}"
-						},
-						{
-							"name": "env",
-							"layout": "${gdc:item=env}"
-						}
-					],
-					"ApmTraceId": "${replace:inner=${event-properties:item=traceId:whenEmpty=00000000-0000-0000-0000-000000000000}:searchFor=-:replaceWith=}"
-				},
-				"enableJsonLayout": true,
-				"requireAuth": true,
-				"disableCertificateValidation": false, // Override this in your own appsettings if needed
-				"documentType": "" // <--- This disables the _type field! This is no longer supported in newer Elastic versions and will throw an exception
-			}
-		},
-		"rules": [ // Note, that when using rules inside your own appsettings file you need to specify all loggers, even console, as you overwrite the rules property
-			{
-				"logger": "*",
-				"minLevel": "Info",
-				"writeTo": "console"
-			}
-		]
-	}
+  "NLog": {
+    "extensions": [
+      { "assembly": "NLog.Targets.ElasticSearch" },
+      { "assembly": "Elastic.CommonSchema.NLog" }
+    ],
+    "autoReload": true, // NLog default: true
+    "throwConfigExceptions": false, // NLog default: false 
+    "throwExceptions": false,
+    "targets": {
+      "console": {
+        "type": "ColoredConsole",
+        "layout": "${longdate} ${processname} ${level:uppercase=true:padding=5} ${logger} ${message} ${exception:format=type,message,StackTrace:separator=\r\n} ${all-event-properties:includeScopeProperties=true}"
+      },
+      "file": {
+        "type": "File",
+        "fileName": "${basedir}/logs/app.log",
+        "archiveFileName": "${basedir}/logs/archive/app.{#}.log.zip",
+        "archiveEvery": "Day", // default: Day
+        "archiveNumbering": "DateAndSequence", // default: Sequence
+        "maxArchiveFiles": 7, // default: 0 (unlimited)
+        "enableArchiveFileCompression": true, // default: false
+        "concurrentWrites": true, // default: true
+        "keepFileOpen": true, // default: false
+        "layout": "${longdate} ${processname} ${threadid:uppercase=true:padding=3} ${level:padding=5} ${callsite} ${message} ${exception:format=type,message,StackTrace:separator=\r\n} ${all-event-properties:includeScopeProperties=true}"
+      },
+      "elastic": {
+        "type": "AsyncWrapper",
+        "name": "elastic",
+        "wrappedTarget": "aelasticRaw",
+        "queueLimit": 10000,
+        "batchSize": 100,
+        "timeToSleepBetweenBatches": 200,
+        "overflowAction": "Discard",
+        "target": {
+          "elastic": {
+            "type": "ElasticSearch",
+            "uri": "",
+            "index": "${date:format=yyyy.MM.dd}-000001",
+            "username": "",
+            "password": "",
+            "layout": {
+              "type": "EcsLayout",
+              "includeScopeProperties": true,
+              "labels": [
+                {
+                  "name": "Callsite",
+                  "layout": "${callsite}"
+                },
+                {
+                  "name": "env",
+                  "layout": "${gdc:item=env}"
+                }
+              ],
+              "ApmTraceId": "${replace:inner=${event-properties:item=traceId:whenEmpty=00000000-0000-0000-0000-000000000000}:searchFor=-:replaceWith=}"
+            },
+            "enableJsonLayout": true,
+            "requireAuth": true,
+            "disableCertificateValidation": false, // Override this in your own appsettings if needed
+            "documentType": "" // <--- This disables the _type field! This is no longer supported in newer Elastic versions and will throw an exception
+          }
+        }
+      }
+    },
+    "rules": [ // Note, that when using rules inside your own appsettings file you need to specify all loggers, even console, as you overwrite the rules property
+      {
+        "logger": "*",
+        "minLevel": "Info",
+        "writeTo": "console"
+      }
+    ]
+  }
 }
