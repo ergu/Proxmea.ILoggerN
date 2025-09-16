@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -13,11 +14,12 @@ namespace Proxmea.ILoggerN
         /// Configures NLog for the application by merging default and application-specific NLog configurations.
         /// </summary>
         /// <param name="builder">The <see cref="WebApplicationBuilder"/> used to access configuration and logging services.</param>
-        public static void ConfigureNLog(WebApplicationBuilder builder)
+        public static void ConfigureNLog(IHostApplicationBuilder builder)
         {
             // Determine environment
             var env = builder.Configuration["AppSettings:Environment"]
                       ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
+                      ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
                       ?? "Development";
 
             GlobalDiagnosticsContext.Set("env", env.ToLower());
@@ -70,7 +72,7 @@ namespace Proxmea.ILoggerN
             };
 
             builder.Logging.ClearProviders();
-            builder.Host.UseNLog();
+            builder.UseNLog();
 
             // Shutdown nicely upon exit
             AppDomain.CurrentDomain.ProcessExit += (_, _) => LogManager.Shutdown();
