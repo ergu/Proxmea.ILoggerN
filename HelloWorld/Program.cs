@@ -55,8 +55,39 @@ namespace HelloWorld
             _logger?.LogCritical("This is a simple log message with a critical error.");
             #endregion
 
+
             #region The logging in a controller later on is easy peasy
             // Look at the HelloWorldController.cs for a very regular basic DI implementation.
+            #endregion
+
+            #region Demonstrate logging unhandled exceptions
+            // Start a task and throw an exception there, to show that unhandled exceptions are logged too.
+            Task.Run(() =>
+            {
+                // Wait a bit to let the main thread finish first
+                Task.Delay(2000).Wait();
+                // Note, this will only be caught on the next GC taking care of this task
+                // which can take some time. It's just the way it is, but it is still caught and logged.
+                throw new Exception("This is an unhandled exception from a task.");
+            });
+
+            // Start a GC event after 5 seconds (so that you don't have to wait foreeeever for this demo to prove itself)
+            Task.Run(() =>
+            {
+                // Wait a bit to let the main app getting started first
+                Task.Delay(5000).Wait();
+                GC.Collect();
+            });
+
+            // Start a thread and throw an exception there, to show that unhandled exceptions are logged too.
+            // This one will be fatal for the application, but it will be logged first ;).  
+            //Thread thread = new Thread(() =>
+            //{
+            //    // Wait a bit to let the main app getting started first
+            //    Thread.Sleep(7000);
+            //    throw new Exception("This is an unhandled exception from a thread.");
+            //});
+            //thread.Start();
             #endregion
 
             app.MapControllers();

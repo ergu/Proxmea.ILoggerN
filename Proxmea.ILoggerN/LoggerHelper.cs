@@ -12,5 +12,11 @@ namespace Proxmea.ILoggerN
 
             return ServicesHelper.GetServiceProvider().GetRequiredService<ILogger<T>>();
         }
+        public static ILogger GetLogger(Type type)
+        {
+            if (ServicesHelper.GetServiceProvider() == null)
+                throw new InvalidOperationException("LoggerHelper is not configured.");
+            return (ILogger)ServicesHelper.GetServiceProvider().GetRequiredService(typeof(ILogger<>).MakeGenericType(type));
+        }
     }
 }

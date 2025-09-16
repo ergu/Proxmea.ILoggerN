@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Web;
+using System.Diagnostics;
 
 namespace Proxmea.ILoggerN
 {
@@ -13,8 +13,9 @@ namespace Proxmea.ILoggerN
         /// <summary>
         /// Configures NLog for the application by merging default and application-specific NLog configurations.
         /// </summary>
-        /// <param name="builder">The <see cref="WebApplicationBuilder"/> used to access configuration and logging services.</param>
-        public static void ConfigureNLog(IHostApplicationBuilder builder)
+        /// <param name="builder">The <see cref="IHostApplicationBuilder"/> used to access configuration and logging services.</param>
+        /// <param name="captureUnhandledExceptions">Control if the logger also handles UnhandledExceptions. Default True</param>
+        public static void ConfigureNLog(IHostApplicationBuilder builder, bool captureUnhandledExceptions = true)
         {
             // Determine environment
             var env = builder.Configuration["AppSettings:Environment"]
@@ -71,11 +72,58 @@ namespace Proxmea.ILoggerN
                 try { File.Delete(mergedConfigPath); } catch { }
             };
 
+            // Handle unhandled exceptions
+            if (captureUnhandledExceptions)
+            {
+                AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+                TaskScheduler.UnobservedTaskException += UnhandledTaskExceptionTrapper;
+            }
+
             builder.Logging.ClearProviders();
             builder.UseNLog();
 
             // Shutdown nicely upon exit
             AppDomain.CurrentDomain.ProcessExit += (_, _) => LogManager.Shutdown();
+        }
+        private static void UnhandledTaskExceptionTrapper(object? sender, UnobservedTaskExceptionEventArgs e) =>
+            UnhandledExceptionTrapper(sender, new UnhandledExceptionEventArgs(e.Exception, false));
+        private static void UnhandledExceptionTrapper(object? sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = e.ExceptionObject as Exception;
+            var categoryType = TryGetExceptionCategoryType(ex) ?? typeof(SharedLogging);
+            var logger = LoggerHelper.GetLogger(categoryType);
+            if (ex != null)
+                logger?.LogError(ex, "Unhandled exception");
+            else
+                logger?.LogError("Unhandled exception: {ExceptionObject}", e.ExceptionObject);
+        }
+        // Prefer the actual throw site; fall back by scanning the stack for a user frame.
+        private static Type? TryGetExceptionCategoryType(Exception? ex)
+        {
+            var target = ex?.TargetSite?.DeclaringType;
+            if (target != null) return target;
+
+            if (ex == null) return null;
+
+            var st = new StackTrace(ex, fNeedFileInfo: false);
+            for (int i = 0; i < st.FrameCount; i++)
+            {
+                var method = st.GetFrame(i)?.GetMethod();
+                var dt = method?.DeclaringType;
+                if (dt == null) continue;
+
+                var ns = dt.Namespace ?? string.Empty;
+                // Heuristic: skip framework/helpers/async state machines
+                if (!ns.StartsWith("System", StringComparison.Ordinal) &&
+                    !ns.StartsWith("Microsoft", StringComparison.Ordinal) &&
+                    !dt.Name.Contains("ThrowHelper", StringComparison.Ordinal) &&
+                    !dt.Name.Contains("MoveNext", StringComparison.Ordinal))
+                {
+                    return dt;
+                }
+            }
+
+            return null;
         }
         private static JToken ConfigSectionToJToken(IConfigurationSection section)
         {

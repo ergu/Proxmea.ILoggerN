@@ -86,6 +86,7 @@ public class HelloWorldController : Controller
 # Changelog
 | Version | Description |
 |---------|-------------|
+| v1.1.5.25259 (2025-09-16)| Added default (optional) logging of unhandled exceptions. Changed to work with non-web apps. Updated NuGets. |
 | v1.0.62.25174 (2025-06-23) | Changed Elastic layout to be async to prevent blocking the main thread on Elastic failure. Updated default console layout to colour output. |
 | v1.0.49.251620 (2025-06-11) | Initial Release |
 
