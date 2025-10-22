@@ -19,6 +19,7 @@ namespace Proxmea.ILoggerN
         {
             // Determine environment
             var env = builder.Configuration["AppSettings:Environment"]
+                      ?? builder.Environment?.EnvironmentName
                       ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
                       ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
                       ?? "Development";
